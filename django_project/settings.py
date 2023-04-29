@@ -114,6 +114,7 @@ AUTHENTICATION_BACKENDS = (
         )
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = 'admin@djangobookstore.com'
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
