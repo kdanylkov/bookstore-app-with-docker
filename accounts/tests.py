@@ -33,11 +33,11 @@ class CustomUserTestCase(TestCase):
 
 class SignUpTestCase(TestCase):
     def setUp(self):
-        self.url = reverse('signup')
+        self.url = reverse('account_signup')
         self.response = self.client.get(self.url)
 
     def test_template_used(self):
-        self.assertTemplateUsed(self.response, 'registration/signup.html')
+        self.assertTemplateUsed(self.response, 'account/signup.html')
 
     def test_template_content(self):
         self.assertContains(self.response, 'Sign up page')
@@ -46,15 +46,13 @@ class SignUpTestCase(TestCase):
         self.assertNotContains(self.response, 'This is a random message')
 
     def test_url_path_exists_at_expected_location(self):
-        response = self.client.get('/')
+        response = self.client.get('/accounts/signup/')
         self.assertEqual(response.status_code, 200)
 
     def test_user_is_created(self):
         payload = {
                 'email': 'test@email.com',
-                'username': 'testusername',
                 'password1': 'lordwoodJ316gdgdg5435',
-                'password2': 'lordwoodJ316gdgdg5435',
                 }
 
         self.assertEqual(get_user_model().objects.count(), 0)
@@ -64,6 +62,9 @@ class SignUpTestCase(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, '/')
         self.assertEqual(get_user_model().objects.count(), 1)
+        self.assertEqual(get_user_model().objects.first().username, 'test')
+        self.assertEqual(get_user_model().objects.first().email,
+                         'test@email.com')
 
     def test_sign_up_view_resolved_properly(self):
         view = resolve('/accounts/signup/')
