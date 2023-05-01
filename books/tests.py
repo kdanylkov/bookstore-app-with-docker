@@ -25,6 +25,11 @@ class BookTestCase(TestCase):
                 author='JK Rowling',
                 price='25.00'
                 )
+        cls.book2 = Book.objects.create(
+                title='The Lord of the Rings',
+                author='J.R.R. Tolkien',
+                price='32.00'
+                )
         cls.review1 = Review.objects.create(
                 book=cls.book,
                 author=cls.user,
@@ -93,3 +98,27 @@ class BookTestCase(TestCase):
                 )
         with self.assertNumQueries(4):
             self.client.get(self.book.get_absolute_url())
+
+    def test_search_page_correct_input(self):
+        search_query = 'Harry'
+        url = reverse('search_results')
+        response = self.client.get(f'{url}?q={search_query}')
+        self.assertContains(response, 'Potter')
+        self.assertEqual(len(response.context.get('book_list')), 1)
+
+        search_query = 'J'
+        url = reverse('search_results')
+        response = self.client.get(f'{url}?q={search_query}')
+        self.assertEqual(len(response.context.get('book_list')), 2)
+
+    def test_search_page_empty_q(self):
+        response = self.client.get(reverse('search_results'))
+        self.assertContains(response, 'Nothing found')
+        self.assertEqual(response.context.get('book_list'), [])
+
+    def test_search_no_results(self):
+        search_query = 'dfsdfsdfsd'
+        url = reverse('search_results')
+        response = self.client.get(f'{url}?q={search_query}')
+        self.assertContains(response, 'Nothing found')
+        self.assertEqual(len(response.context.get('book_list')), 0)
