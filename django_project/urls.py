@@ -21,7 +21,7 @@ from django.conf import settings
 
 urlpatterns = [
     # Django admin
-    path('admin/', admin.site.urls),
+    path('superuseraccess/', admin.site.urls),
     # Users management
     path('accounts/', include('allauth.urls')),
     # Local

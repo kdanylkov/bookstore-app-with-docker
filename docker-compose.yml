@@ -8,8 +8,17 @@ services:
       - 8000:8000
     depends_on:
       - db
-    env_file:
-      - .env
+    environment:
+      - 'DATABASE_URL=postgres://postgres:postgres@db:5432/postgres'
+      - 'DJANGO_SECRET_KEY=django-insecure-78m20!)z)s!gn$k7n3!&ili^^5o6&521_so0&17o+4ol@a@r64'
+      - 'DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1'
+      - 'DJANGO_DEBUG=True'
+      - 'DJANGO_SECURE_SSL_REDIRECT=False'
+      - 'DJANGO_SECURE_HSTS_SECONDS=0'
+      - 'DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS=False'
+      - 'DJANGO_SECURE_HSTS_PRELOAD=False'
+      - 'DJANGO_SESSION_COOKIE_SECURE=False'
+      - 'DJANGO_CSRF_COOKIE_SECURE=False'
   db:
     image: postgres:13
     volumes:
